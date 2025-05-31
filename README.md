@@ -1,8 +1,8 @@
 <div align="center">
-# 🐱 Cheshire Cat AI - Production Ready Local
-</div>
 
-<div align="center">
+# 🐱 Cheshire Cat AI - Production Ready Local
+
+
 
 ![Cheshire Cat AI](https://img.shields.io/badge/Cheshire%20Cat-AI%20Assistant-purple?style=for-the-badge&logo=cat)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
