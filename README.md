@@ -49,8 +49,8 @@ A **production-ready** local deployment of [Cheshire Cat AI](https://cheshirecat
 
 ```bash
 # Clone and start in 30 seconds
-git clone https://github.com/yourusername/cheshire-cat-production-local.git
-cd cheshire-cat-production-local
+git clone https://github.com/federicopalma-pro/Stregatto-Production-Ready.git
+cd Stregatto-Production-Ready
 
 # Create environment file from sample
 cp .env-sample .env
