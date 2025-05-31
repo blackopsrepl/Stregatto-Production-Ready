@@ -1,4 +1,6 @@
-# 🐱 Cheshire Cat AI - Production Ready Local Deployment
+<div align="center">
+# 🐱 Cheshire Cat AI - Production Ready Local
+</div>
 
 <div align="center">
 
@@ -66,7 +68,7 @@ docker-compose up -d
 
 ---
 
-## 🏗️ **Architecture Overview**
+## ⚙️ **Architecture Overview**
 
 
 
