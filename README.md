@@ -62,7 +62,7 @@ cp .env-sample .env
 docker-compose up -d
 ```
 
-✅ Ready! Access at http://localhost/admin and enjoy the Cat
+✅ Ready! Access at http://localhost/auth/login and enjoy the Cat
 
 ---
 
