@@ -43,7 +43,7 @@ A **production-ready** local deployment of [Cheshire Cat AI](https://cheshirecat
 ## 🚀 **Quick Start**
 
 ### Prerequisites
-- 🐳 **Docker** & Docker Compose
+- 🐳 **Docker** & Docker Compose or Podman (version >= 5.4.2)
 - 💻 **4GB RAM** minimum (8GB recommended)
 - 🔌 **2 CPU cores** minimum
 
@@ -60,8 +60,11 @@ cp .env-sample .env
 # Edit environment variables as needed
 # nano .env
 
-# Start the containers
+# Start the containers with Docker Compose
 docker-compose up -d
+
+# Start the container with Podman
+podman-compose up -d
 ```
 
 ✅ Ready! Access at http://localhost/auth/login and enjoy the Cat
