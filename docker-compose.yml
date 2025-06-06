@@ -10,9 +10,16 @@ services:
       - ./nginx/nginx-local.conf:/etc/nginx/nginx.conf:ro   
       - ./static:/var/www/static:ro
     depends_on:
-      - cheshire-cat-core
+      cheshire-cat-core:
+        condition: service_healthy
     networks:
       - cat-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   # Cheshire Cat Core
   cheshire-cat-core:
@@ -46,9 +53,16 @@ services:
       - ./plugins:/app/cat/plugins
       - ./data:/app/cat/data
     depends_on:
-      - qdrant  
+      qdrant:
+        condition: service_healthy
     networks:
       - cat-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/openapi.json"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     
 
   # Vector Database
@@ -66,7 +80,13 @@ services:
       - "6333:6333"  
     networks:
       - cat-network
-    
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'true < /dev/tcp/127.0.0.1/6333'"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
 # Network
 networks:
   cat-network:

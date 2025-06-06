@@ -2,8 +2,6 @@
 
 # 🐱 Cheshire Cat AI - Production Ready Local
 
-
-
 ![Cheshire Cat AI](https://img.shields.io/badge/Cheshire%20Cat-AI%20Assistant-purple?style=for-the-badge&logo=cat)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
 ![Production](https://img.shields.io/badge/Production-Ready-green?style=for-the-badge&logo=checkmarx)
@@ -43,7 +41,8 @@ A **production-ready** local deployment of [Cheshire Cat AI](https://cheshirecat
 ## 🚀 **Quick Start**
 
 ### Prerequisites
-- 🐳 **Docker** & Docker Compose
+
+- 🐳 **Docker** & Docker Compose or Podman (version >= 5.4.2)
 - 💻 **4GB RAM** minimum (8GB recommended)
 - 🔌 **2 CPU cores** minimum
 
@@ -60,20 +59,20 @@ cp .env-sample .env
 # Edit environment variables as needed
 # nano .env
 
-# Start the containers
+# Start the containers with Docker Compose
 docker-compose up -d
+
+# Start the container with Podman
+podman-compose up -d
 ```
 
-✅ Ready! Access at http://localhost/auth/login and enjoy the Cat
+✅ Ready! Access at <http://localhost/auth/login> and enjoy the Cat
 
 ---
 
 ## ⚙️ **Architecture Overview**
 
-
-
-
-```
+```plaintext
 🌐 NGINX Reverse Proxy (Port 80 → Load Balancer)
           │
           ▼
@@ -90,9 +89,6 @@ docker-compose up -d
   ├── 📄 Static Files
   └── 🧩 Plugins Storage
 ```
-
-
-
 
 ---
 
