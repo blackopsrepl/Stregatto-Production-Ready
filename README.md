@@ -28,6 +28,10 @@ A **production-ready** local deployment of [Cheshire Cat AI](https://cheshirecat
   - **CHESHIRECAT AI**: Core AI system with advanced language capabilities and plugin architecture
   - **QDRANT**: High-performance vector database for semantic search and AI memory storage
 
+- ⎈ **Kubernetes/Helm Options**:
+  - **Static Manifests**: Quick K3s deployment with predefined configurations
+  - **Helm Charts**: Advanced templating with production-ready configurations and secrets management
+
 ### ⚡ **Performance & Reliability**
 
 - 🛡️ **Container Isolation** & security
@@ -44,7 +48,8 @@ A **production-ready** local deployment of [Cheshire Cat AI](https://cheshirecat
 ### Prerequisites
 
 - 🐳 **Docker** & Docker Compose or Podman (version >= 5.4.2) **OR**
-- ☸️ **K3s/Kubernetes** cluster with kubectl configured  
+- ☸️ **K3s/Kubernetes** cluster with kubectl configured **OR**
+- ⎈ **Helm 3.0+** for advanced Kubernetes deployments
 - 💻 **4GB RAM** minimum (8GB recommended)
 - 🔌 **2 CPU cores** minimum
 - 🛠️ **Make** (usually pre-installed on Linux/macOS)
@@ -61,11 +66,15 @@ make docker-up
 
 # ☸️ OR K3s deployment (one command!)
 make k3s-deploy
+
+# ⎈ OR Helm deployment (production-ready!)
+helm install cheshire-cat helm/cheshire-cat --namespace cheshire-cat --create-namespace
 ```
 
 ✅ That's it! 
 - **Docker**: Access at <http://localhost/auth/login>
 - **K3s**: Access at <http://localhost:30080/auth/login>
+- **Helm**: Access at <http://localhost:30080/auth/login> (configurable)
 
 ### **📋 Available Commands**
 
@@ -78,6 +87,38 @@ make k3s-deploy        # ☸️ Deploy to K3s/Kubernetes
 make k3s-cleanup       # 🗑️ Clean up K3s deployment
 make k3s-status        # 📊 Check K3s deployment status
 ```
+
+### **⎈ Helm Deployment (Advanced)**
+
+For production environments, use our comprehensive Helm chart:
+
+```bash
+# Generate secure keys first
+make env
+
+# Quick deployment
+helm install cheshire-cat helm/cheshire-cat --namespace cheshire-cat --create-namespace
+
+# Production deployment with custom values
+helm install cheshire-cat helm/cheshire-cat \
+  -f helm/cheshire-cat/values-production.yaml \
+  --namespace cheshire-cat-prod --create-namespace
+
+# Upgrade existing deployment
+helm upgrade cheshire-cat helm/cheshire-cat --namespace cheshire-cat
+
+# Uninstall
+helm uninstall cheshire-cat --namespace cheshire-cat
+```
+
+**🎯 Why Helm?**
+- ✅ **Production-Ready**: Advanced configuration options
+- ✅ **Templating**: Dynamic values and environment-specific configs  
+- ✅ **Versioning**: Easy upgrades and rollbacks
+- ✅ **Packaging**: Distributable chart packages
+- ✅ **Secrets Management**: Secure handling of API keys and JWT tokens
+
+📖 **[View Helm Chart Documentation →](helm/cheshire-cat/README.md)**
 
 ### **🔧 Manual Installation (Alternative)**
 
@@ -98,8 +139,18 @@ cd docker && docker-compose up -d
 # Generate environment keys
 scripts/generate-env.sh
 
-# Deploy to K3s
+# Deploy to K3s (static manifests)
 scripts/k3s-deploy.sh
+```
+
+#### Helm Deployment
+```bash
+# Generate environment keys
+scripts/generate-env.sh
+
+# Deploy with Helm
+cd helm/cheshire-cat
+helm install cheshire-cat . --namespace cheshire-cat --create-namespace
 ```
 
 </details>
