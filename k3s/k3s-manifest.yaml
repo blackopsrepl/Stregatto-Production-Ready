@@ -142,11 +142,10 @@ metadata:
   labels:
     app: qdrant
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 6333
     targetPort: 6333
-    nodePort: 30633
     name: qdrant-api
   selector:
     app: qdrant
@@ -208,7 +207,7 @@ spec:
               name: cheshire-cat-secrets
               key: API_KEY_WS
         - name: CCAT_QDRANT_HOST
-          value: "qdrant.cheshire-cat.svc.cluster.local"
+          value: "qdrant"
         - name: CCAT_QDRANT_PORT
           value: "6333"
         - name: CCAT_QDRANT_API_KEY
@@ -220,12 +219,13 @@ spec:
           value: "http://localhost"
         - name: CCAT_CORS_ENABLED
           value: "true"
+        # Override Kubernetes auto-generated service variables
         - name: QDRANT_SERVICE_HOST
-          value: ""
+          value: "qdrant"
         - name: QDRANT_SERVICE_PORT
-          value: ""
+          value: "6333"
         - name: QDRANT_PORT
-          value: ""
+          value: "6333"
         volumeMounts:
         - name: static
           mountPath: /app/cat/static

@@ -92,6 +92,34 @@ k3s-manifests: ## 📋 Apply main manifests only
 	@kubectl apply -f k3s/k3s-manifest.yaml
 	@echo -e "$(GREEN)✅ Manifests applied!$(NC)"
 
+k3s-test-connection: ## 🔗 Test Cheshire Cat to Qdrant connectivity
+	@echo -e "$(BLUE)🔗 Testing Cheshire Cat to Qdrant connectivity...$(NC)"
+	@echo -e "$(BLUE)📊 Checking if services are running:$(NC)"
+	@kubectl get pods -n cheshire-cat -l app=qdrant
+	@kubectl get pods -n cheshire-cat -l app=cheshire-cat-core
+	@echo -e "$(BLUE)📡 Testing DNS resolution from Cheshire Cat to Qdrant:$(NC)"
+	@kubectl exec -n cheshire-cat deployment/cheshire-cat-core -- nslookup qdrant 2>/dev/null || echo "DNS resolution test failed"
+	@echo -e "$(BLUE)🌐 Testing HTTP connectivity to Qdrant:$(NC)"
+	@kubectl exec -n cheshire-cat deployment/cheshire-cat-core -- wget -q --spider http://qdrant:6333/ && echo "✅ HTTP connectivity successful" || echo "❌ HTTP connectivity failed"
+	@echo -e "$(BLUE)📝 Recent Cheshire Cat logs for Qdrant connections:$(NC)"
+	@kubectl logs -n cheshire-cat deployment/cheshire-cat-core --tail=20 | grep -i qdrant || echo "No Qdrant-related logs found"
+
+k3s-restart-cat: ## 🔄 Restart Cheshire Cat pod (useful after config changes)
+	@echo -e "\033[33m🔄 Restarting Cheshire Cat...\033[0m"
+	kubectl rollout restart deployment/cheshire-cat-core -n cheshire-cat
+	kubectl rollout status deployment/cheshire-cat-core -n cheshire-cat
+	@echo -e "\033[32m✅ Cheshire Cat restarted!\033[0m"
+
+k3s-restart-nginx: ## Restart NGINX proxy (useful after config changes)
+	@echo -e "\033[33m🔄 Restarting NGINX...\033[0m"
+	kubectl rollout restart deployment/nginx -n cheshire-cat
+	kubectl rollout status deployment/nginx -n cheshire-cat
+	@echo -e "\033[32m✅ NGINX restarted!\033[0m"
+
+k3s-debug-env: ## 🔍 Show Cheshire Cat environment variables for debugging
+	@echo -e "$(BLUE)🔍 Cheshire Cat environment variables:$(NC)"
+	@kubectl exec -n cheshire-cat deployment/cheshire-cat-core -- env | grep -E "(QDRANT|CCAT)" | sort
+
 ##@ Development & Testing
 
 test-scripts: ## 🧪 Test that all scripts are executable and accessible

@@ -42,8 +42,75 @@ data:
             add_header X-Content-Type-Options nosniff always;
             add_header X-XSS-Protection "1; mode=block" always;
 
+            # Handle plugins endpoint with trailing slash for GET requests only
+            location = /plugins {
+                if ($request_method = GET) {
+                    return 301 $scheme://$http_host/plugins/;
+                }
+                proxy_pass http://cheshire-cat-core:80/plugins/;
+                proxy_http_version 1.1;
+                proxy_set_header Connection "";
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-Host $host;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            }
+            
+            location /plugins/ {
+                proxy_pass http://cheshire-cat-core:80/plugins/;
+                proxy_http_version 1.1;
+                proxy_set_header Connection "";
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-Host $host;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            }
+
+            # Handle rabbithole endpoint - pass POST directly to /rabbithole/
+            location = /rabbithole {
+                if ($request_method = GET) {
+                    return 301 $scheme://$http_host/rabbithole/;
+                }
+                # For POST requests, proxy directly to the trailing slash endpoint
+                proxy_pass http://cheshire-cat-core:80/rabbithole/;
+                proxy_http_version 1.1;
+                proxy_set_header Connection "";
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-Host $host;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                
+                # File upload specific settings
+                proxy_request_buffering off;
+                proxy_buffering off;
+                client_max_body_size 1G;
+                proxy_read_timeout 600s;
+                proxy_send_timeout 600s;
+            }
+            
+            location /rabbithole/ {
+                proxy_pass http://cheshire-cat-core:80/rabbithole/;
+                proxy_http_version 1.1;
+                proxy_set_header Connection "";
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-Host $host;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                
+                # File upload specific settings
+                proxy_request_buffering off;
+                proxy_buffering off;
+                client_max_body_size 1G;
+                proxy_read_timeout 600s;
+                proxy_send_timeout 600s;
+            }
+
             location / {
-                proxy_pass http://cheshire-cat-core:80/;
+                proxy_pass http://cheshire-cat-core:80;
                 proxy_http_version 1.1;
                 proxy_set_header Connection "";
                 proxy_set_header Host $host;
