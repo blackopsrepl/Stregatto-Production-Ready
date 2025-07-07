@@ -169,7 +169,7 @@ make env                # Generate secure environment keys
 ### **🚀 Direct Scripts**  
 ```bash
 scripts/generate-env.sh     # Linux/macOS
-scripts/generate-env.ps1    # Windows (PowerShell)
+powershell -ExecutionPolicy Bypass -File scripts/generate-env.ps1    # Windows (PowerShell)
 ```
 
 ### **📝 Manual Setup (Alternative)**
